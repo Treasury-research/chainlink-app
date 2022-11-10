@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
 import Logo from '../../static/img/logo.png';
+import useChainlinkContract from '../../contract/useChainlinkContract';
 import { BrowserRouter as Router, Switch, Route, Redirect, Link } from 'react-router-dom';
 import { RouteComponentProps, useHistory } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
@@ -8,6 +9,7 @@ import { routerConfig } from './../../router';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 
 export default function Home() {
+  const chainlinkContract = useChainlinkContract();
 
   const [routers, setRouters] = useState(routerConfig);
 
@@ -54,6 +56,16 @@ export default function Home() {
     })
     history.push(routers[index]['children'][i]['path']);
   };
+
+  const getPageRank = async () => {
+    const res = await chainlinkContract.getPageRank()
+    //address , rank ,score
+    console.log('res', res)
+  }
+
+  useEffect(()=>{
+      getPageRank();
+  }, [])
 
   return (
     <div className="page-home">

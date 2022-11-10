@@ -59,7 +59,7 @@ export default function Home() {
 
   const getPageRank = async () => {
     const res = await chainlinkContract.getPageRank()
-    //address , rank ,score
+    // address, rank ,score
     console.log('res', res)
   }
 
@@ -114,9 +114,6 @@ export default function Home() {
               </div>
             )
           }
-          {/* <div></div>
-          <div></div>
-          <div></div> */}
         </div>
       </div>
       <div className="page-right-content" key={history.location.key}>

@@ -1,9 +1,8 @@
 import { useMemo } from "react";
-import Web3 from "web3";
-import { endpoint } from "../config";
+import useWeb3Context from "./useWeb3Context";
 
 export default function useContract(ABI, address) {
-  const web3 = new Web3(endpoint);
+  const { web3 } = useWeb3Context();
   return useMemo(() => {
     if (!web3) {
       return;

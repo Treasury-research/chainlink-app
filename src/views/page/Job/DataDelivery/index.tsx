@@ -45,16 +45,12 @@ export default function DataDelivery() {
   };
 
   const sureRequest = async () => {
-    console.log({
-        ...chainBaseInfo,
-        deliveryMethod,
-        deliveryFrequency:''
-      })
     const res: any = await api.job.create({
       ...chainBaseInfo,
       deliveryMethod,
       deliveryFrequency:'',
-      socialStatus:chainBaseInfo.socialStatus.join(';').toLowerCase()
+      socialStatus:chainBaseInfo.socialStatus.join(','),
+      interestedAddress:chainBaseInfo.interestedAddress.toLowerCase()
     })
 
     if (res.code === 200) {

@@ -73,7 +73,6 @@ export default function DataProcessing() {
   }
 
   useEffect(() => {
-    debugger
     setInterestedAddress(chainBaseInfo.interestedAddress);
     setDataType(chainBaseInfo.dataType || '1');
     setAlogorithm(chainBaseInfo.alogorithm || '1');

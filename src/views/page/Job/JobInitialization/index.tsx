@@ -28,6 +28,7 @@ export default function JobInitialization() {
   const requestPageRankInfoParams = async () => {
     // pass address here
     const res = await chainlinkContract.requestPageRankInfoParams(['0x1397e2861846A48EA575E3F1f6920F5Fd6E7d1B1'])
+    console.log(res)
   }
 
   return (

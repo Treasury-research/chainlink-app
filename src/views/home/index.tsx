@@ -7,15 +7,28 @@ import { RouteComponentProps, useHistory } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { routerConfig } from './../../router';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
+import { routerActive } from './../../store/atom';
 
 export default function Home() {
   const chainlinkContract = useChainlinkContract();
 
   const [routers, setRouters] = useState(routerConfig);
 
+  const [routerActiveStr, setRouterActiveStr] = useRecoilState<any>(routerActive)
+
   const history = useHistory();
 
   useEffect(() => {
+    refreshRouterActive();
+  }, [history.location.pathname]);
+
+  useEffect(() => {
+    if(routerActiveStr){
+      history.push(`/home/job/${routerActiveStr}`)
+    }
+  }, [routerActiveStr]);
+
+  const refreshRouterActive = () => {
     setRouters((prev: any) => {
       if (history.location.pathname == '/home') {
         prev[0]['active'] = true;
@@ -26,13 +39,15 @@ export default function Home() {
             if (h.path === history.location.pathname) {
               prev[i]['active'] = true;
               prev[i]['children'][r]['active'] = true;
+            }else{
+              prev[i]['children'][r]['active'] = false;
             }
           })
         })
       }
       return [...prev]
     })
-  }, [history.location.pathname]);
+  }
 
   const menuClick = (i: number) => {
     setRouters((prev: any) => {
@@ -54,6 +69,7 @@ export default function Home() {
       prev[index]['children'][i]['active'] = true;
       return [...prev]
     })
+    setRouterActiveStr('');
     history.push(routers[index]['children'][i]['path']);
   };
 
@@ -117,7 +133,7 @@ export default function Home() {
         </div>
       </div>
       <div className="page-right-content" key={history.location.key}>
-        <Router forceRefresh={true}>
+        <Router>
           <Switch>
             {
               routers.map((item: any, index: number) =>
@@ -127,9 +143,6 @@ export default function Home() {
               )
             }
             <Redirect to="/home/dashboard/instanceUsage" />
-            {/* <Route path="/home/claim" component={Claim} />
-            <Route path="/home/template" component={Template} />
-            <Redirect to="/home/template" /> */}
           </Switch>
         </Router>
       </div>

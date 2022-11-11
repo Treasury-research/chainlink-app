@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Radio, Space, DatePicker } from 'antd';
 import { useHistory } from 'react-router-dom';
+import { chainInfo, routerActive } from './../../../../store/atom';
+import api from './../../../../api';
+import { useRecoilState } from 'recoil';
 import moment from 'moment';
 import './index.scss';
 
@@ -10,13 +13,17 @@ const { TextArea } = Input;
 
 export default function DataDelivery() {
 
-  const [frequency, setFrequency] = useState(1);
+  const [frequency, setFrequency] = useState('1');
 
-  const [method, setmethod] = useState(1);
+  const [deliveryMethod, setDeliveryMethod] = useState('1');
 
   const [step, setStep] = useState('init');
 
   const [date, setDate] = useState("");
+
+  const [routerActiveStr, setRouterActiveStr] = useRecoilState(routerActive);
+
+  const [chainBaseInfo, setChainBaseInfo] = useRecoilState(chainInfo);
 
   const history = useHistory();
 
@@ -29,18 +36,31 @@ export default function DataDelivery() {
     setFrequency(e.target.value);
   };
 
-  const onChangeMethod = (e: any) => {
-    console.log('radio checked', e.target.value);
-    setmethod(e.target.value);
-  };
-
   const back = () => {
     if(step === 'init'){
-      history.push('/home/job/dataProcessing')
+      setRouterActiveStr('dataProcessing');
     }else{
-      setStep('init')
+      setStep('init');
     }
   };
+
+  const sureRequest = async () => {
+    console.log({
+        ...chainBaseInfo,
+        deliveryMethod,
+        deliveryFrequency:''
+      })
+    const res: any = await api.job.create({
+      ...chainBaseInfo,
+      deliveryMethod,
+      deliveryFrequency:'',
+      socialStatus:chainBaseInfo.socialStatus.join(';').toLowerCase()
+    })
+
+    if (res.code === 200) {
+    }
+    // setStep('result_1')
+  }
 
   return (
     <div className="dataDelivery">
@@ -50,34 +70,34 @@ export default function DataDelivery() {
           <div className="title">Please select data delivery frequency</div>
           <Radio.Group value={frequency} onChange={onChangeFrequency}>
             <Space direction="vertical">
-              <Radio value={1}>Executed by Smart Contract</Radio>
-              <Radio value={2}>One time</Radio>
-              <Radio value={3}>Daily</Radio>
-              <Radio value={4}>Hourly</Radio>
+              <Radio value={'1'}>Executed by Smart Contract</Radio>
+              <Radio value={'2'}>One time</Radio>
+              <Radio value={'3'}>Daily</Radio>
+              <Radio value={'4'}>Hourly</Radio>
             </Space>
           </Radio.Group>
           <div className="title top">Please select data delivery method</div>
-          <Radio.Group value={method} onChange={onChangeMethod}>
+          <Radio.Group value={deliveryMethod} onChange={(e:any) => setDeliveryMethod(e.target.value)}>
             <Space direction="vertical">
-              <Radio value={1}>Smart Contract</Radio>
-              <Radio value={2}>text in json</Radio>
-              <Radio value={3}>S3</Radio>
-              <Radio value={4}>IPFS</Radio>
-              <Radio value={5}>Arweave</Radio>
-              <Radio value={6}>TiDB</Radio>
+              <Radio value={'1'}>Smart Contract</Radio>
+              <Radio value={'2'}>text in json</Radio>
+              <Radio value={'3'}>S3</Radio>
+              <Radio value={'4'}>IPFS</Radio>
+              <Radio value={'5'}>Arweave</Radio>
+              <Radio value={'6'}>TiDB</Radio>
             </Space>
           </Radio.Group>
           <div className='date'>
             <div>
               {
-                frequency === 3 &&
+                frequency === '3' &&
                 <DatePicker format={dateFormat} value={date ? moment(date, dateFormat) : null} onChange={(date: any, dateString: string) => setDate(dateString)} />
               }
 
             </div>
             <div>
               {
-                frequency === 4 &&
+                frequency === '4' &&
                 <DatePicker format={dateFormat} value={date ? moment(date, dateFormat) : null} onChange={(date: any, dateString: string) => setDate(dateString)} />
               }
             </div>
@@ -137,7 +157,7 @@ export default function DataDelivery() {
       <div className='btn-group'>
         {
           step == 'init' &&
-          <div className="chainlink-primary-btn" onClick={() => setStep('result_1')}>Next</div>
+          <div className="chainlink-primary-btn" onClick={sureRequest}>Next</div>
         }
         {
           step !== 'init' &&

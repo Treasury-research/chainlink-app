@@ -1,15 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import { Select } from 'antd';
 import { useHistory } from 'react-router-dom';
+import { chainInfo, routerActive } from './../../../../store/atom';
+import { useRecoilState } from 'recoil';
 import './index.scss';
 
 export default function DataPreparation() {
 
+  const [basicInfo, setBasicInfo] = useState("")
+
+  const [socialStatus, setSocialStatus] = useState([])
+
+  const [financialStatus, setFinancialStatus] = useState("")
+
+  const [repution, setRepution] = useState("")
+
+  const [chainBaseInfo, setChainBaseInfo] = useRecoilState(chainInfo);
+
+  const [routerActiveStr, setRouterActiveStr] = useRecoilState(routerActive);
+
   const history = useHistory();
 
   const routerTo = (str: string) => {
-    history.push(str)
+    setChainBaseInfo((prev: any) => {
+      return {
+        ...prev,
+        basicInfo,
+        socialStatus,
+        financialStatus,
+        repution
+      }
+    })
+    setRouterActiveStr('dataProcessing');
   }
+
+  const returnTo = () => {
+    setRouterActiveStr('jobInitialization');
+  }
+
+  useEffect(() => {
+    setBasicInfo(chainBaseInfo.basicInfo);
+    setSocialStatus(chainBaseInfo.socialStatus);
+    setFinancialStatus(chainBaseInfo.financialStatus);
+    setRepution(chainBaseInfo.repution);
+  }, []);
 
   return (
     <div className="dataPreparation">
@@ -18,6 +52,8 @@ export default function DataPreparation() {
         <div className="title-small">User base info</div>
         <div className="input">
           <Select
+            value={basicInfo}
+            onChange={(e) => setBasicInfo(e)}
             options={[
               {
                 value: 'address',
@@ -30,6 +66,8 @@ export default function DataPreparation() {
         <div className="input">
           <Select
             mode="multiple"
+            value={socialStatus}
+            onChange={(e) => setSocialStatus(e)}
             options={[
               {
                 value: '1',
@@ -61,6 +99,8 @@ export default function DataPreparation() {
         <div className="title-small">Financial status</div>
         <div className="input">
           <Select
+            value={financialStatus}
+            onChange={(e) => setFinancialStatus(e)}
             options={[
               {
                 value: '1',
@@ -76,13 +116,15 @@ export default function DataPreparation() {
         <div className="title-small">On Chain reputation</div>
         <div className="input">
           <Select
+            value={repution}
+            onChange={(e) => setRepution(e)}
             options={[]}
           />
         </div>
       </div>
       <div className='btn-group'>
         <div className="chainlink-primary-btn" onClick={() => routerTo('/home/job/dataProcessing')}>Next</div>
-        <div className="chainlink-default-btn" onClick={() => routerTo('/home/job/jobInitialization')}>Back</div>
+        <div className="chainlink-default-btn" onClick={() => returnTo()}>Back</div>
       </div>
     </div>
   );

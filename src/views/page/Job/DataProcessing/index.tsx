@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import { Select, Radio, Space, Input, Upload, Button } from 'antd';
 import { useHistory } from 'react-router-dom';
+import { chainInfo, routerActive } from './../../../../store/atom';
+import { useRecoilState } from 'recoil';
 import './index.scss';
 const { TextArea } = Input;
 
@@ -9,23 +11,19 @@ export default function DataProcessing() {
 
   const history = useHistory();
 
-  const [process, setProcess] = useState(1);
+  const [dataType, setDataType] = useState('1');
 
-  const [alogorithm, setAlogorithm] = useState(1);
+  const [alogorithm, setAlogorithm] = useState('1');
+
+  const [interestedAddress,setInterestedAddress] = useState('');
 
   const [scriptType, setScriptType] = useState(1);
   
   const [step, setStep] = useState('init');
 
-  const onChangeAlogorithm = (e: any) => {
-    console.log('radio checked', e.target.value);
-    setAlogorithm(e.target.value);
-  };
+  const [chainBaseInfo, setChainBaseInfo] = useRecoilState(chainInfo);
 
-  const onChangeProcess = (e: any) => {
-    console.log('radio checked', e.target.value);
-    setProcess(e.target.value);
-  };
+  const [routerActiveStr, setRouterActiveStr] = useRecoilState(routerActive);
 
   const onChangeScriptType = (e: any) => {
     console.log('radio checked', e.target.value);
@@ -34,20 +32,28 @@ export default function DataProcessing() {
 
   const processNext = () => {
     if(step == 'init'){
-      setStep(`step_${process}`)
+      setStep(`step_${dataType}`)
     }else{
-      history.push('/home/job/dataDelivery')
+      setChainBaseInfo((prev: any) => {
+        return {
+          ...prev,
+          dataType,
+          alogorithm,
+          interestedAddress
+        }
+      });
+      setRouterActiveStr("dataDelivery");
     }
   }
 
   const routerTo = (str:string) => {
-    history.push(str)
+    setRouterActiveStr(str);
   }
 
   const getResult = () => {
     if(step == 'step_3'){
-      if(alogorithm == 4){
-        history.push('/home/job/dataDelivery')
+      if(alogorithm == '4'){
+        setRouterActiveStr("dataDelivery");
       }else{
         setStep(`step_3_${alogorithm}`)
       }
@@ -56,7 +62,7 @@ export default function DataProcessing() {
 
   const back = () => {
     if(step == 'init'){
-      history.push('/home/job/dataPreparation')
+      setRouterActiveStr("dataPreparation");
     }else{
       if(step.split('_').length == 2){
         setStep('init')
@@ -65,6 +71,14 @@ export default function DataProcessing() {
       }
     }
   }
+
+  useEffect(() => {
+    debugger
+    setInterestedAddress(chainBaseInfo.interestedAddress);
+    setDataType(chainBaseInfo.dataType || '1');
+    setAlogorithm(chainBaseInfo.alogorithm || '1');
+  }, []);
+
   return (
     <div className="dataProcessing">
       {
@@ -72,12 +86,12 @@ export default function DataProcessing() {
         <div className="con">
           <div className="title">Please select how you want the data to be processed</div>
           <div>
-            <Radio.Group value={process} onChange={onChangeProcess}>
+            <Radio.Group value={dataType} onChange={(e:any) => setDataType(e.target.value)}>
               <Space direction="vertical">
-                <Radio value={1}>Raw Data</Radio>
-                <Radio value={2}>Customized aggregation</Radio>
-                <Radio value={3}>Algorithm Ready to Use</Radio>
-                <Radio value={4}>Customized Algorithm</Radio>
+                <Radio value={'1'}>Raw Data</Radio>
+                <Radio value={'2'}>Customized aggregation</Radio>
+                <Radio value={'3'}>Algorithm Ready to Use</Radio>
+                <Radio value={'4'}>Customized Algorithm</Radio>
               </Space>
             </Radio.Group>
           </div>
@@ -91,7 +105,7 @@ export default function DataProcessing() {
           <div className='des'>For a better user experience, there is a limit of 10 returned results for each query by default.</div>
           <div className='des'>You can modify this parameter to a maximum of 30 items for each query</div>
           <div>
-            <TextArea rows={16} />
+            <TextArea rows={16} value={interestedAddress} onChange={(e:any) => setInterestedAddress(e.target.value)}/>
           </div>
         </div>
       }
@@ -109,12 +123,12 @@ export default function DataProcessing() {
         <div className="con">
           <div className="title">Please select an alogorithm</div>
           <div>
-            <Radio.Group value={alogorithm} onChange={onChangeAlogorithm}>
+            <Radio.Group value={alogorithm} onChange={(e:any) => setAlogorithm(e.target.value)}>
               <Space direction="vertical">
-                <Radio value={1}>PageRank</Radio>
-                <Radio value={2}>Address similarity</Radio>
-                <Radio value={3}>Shortest Path between two addresses</Radio>
-                <Radio value={4}>Community detection</Radio>
+                <Radio value={'1'}>PageRank</Radio>
+                <Radio value={'2'}>Address similarity</Radio>
+                <Radio value={'3'}>Shortest Path between two addresses</Radio>
+                <Radio value={'4'}>Community detection</Radio>
               </Space>
             </Radio.Group>
           </div>
@@ -155,7 +169,7 @@ export default function DataProcessing() {
       {
         step === 'step_3' &&
         <div className='btn-group'>
-          <div className="chainlink-primary-btn" onClick={() => routerTo('/home/job/dataDelivery')}>Get Default Result</div>
+          <div className="chainlink-primary-btn" onClick={() => routerTo('dataDelivery')}>Get Default Result</div>
           <div className="chainlink-prev-btn" onClick={() => getResult()}>Get Interested Result</div>
           <div className="chainlink-default-btn" onClick={() => back()}>Back</div>
         </div>

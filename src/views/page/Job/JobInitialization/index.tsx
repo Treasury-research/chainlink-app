@@ -1,29 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import useWeb3Context from '../../../../hooks/useWeb3Context';
 import useChainlinkContract from '../../../../contract/useChainlinkContract';
+import { chainInfo, routerActive } from './../../../../store/atom';
+import { useRecoilState } from 'recoil';
 import './index.scss';
 import Bac from "./../../../../static/img/bac4.png"
 import { useHistory } from 'react-router-dom';
 
 export default function JobInitialization() {
   const {account, connectWallet} = useWeb3Context();
+
   const chainlinkContract = useChainlinkContract()
+
+  const [routerActiveStr, setRouterActiveStr] = useRecoilState(routerActive);
 
   const history = useHistory();
 
   const routerTo = () => {
-    history.push('/home/job/dataPreparation')
+    setRouterActiveStr('dataPreparation');
   }
 
   const requestPageRankInfo = async () => {
-    const res = await chainlinkContract.requestPageRankInfo()
-    console.log('111', res)
-
+    const res = await chainlinkContract.requestPageRankInfo();
+    console.log(res)
   }
 
   const requestPageRankInfoParams = async () => {
     // pass address here
-    const res = await chainlinkContract.requestPageRankInfoParams(['0xdeE3aFB126db3f0C03F3163bC2F3b3f20587188D'])
+    const res = await chainlinkContract.requestPageRankInfoParams(['0x1397e2861846A48EA575E3F1f6920F5Fd6E7d1B1'])
   }
 
   return (

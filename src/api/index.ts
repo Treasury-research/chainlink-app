@@ -16,22 +16,10 @@ api.interceptors.response.use((res) => {
   }
 });
 
-const template = {
-  list: async (params?: any) => api.get("/template", { params }),
-  create: async (params?: any) => api.post("/template", params),
-  getTem: async (id?: any) => api.get(`/template/${id}`),
-  delete: async (id?: any) => api.delete(`/template/${id}`),
-};
-
-const offer = {
-  list: async (params?: any) => api.get("/offer", { params }),
-  create: async (params?: any) => api.post("/offer", params),
-  delete: async (id?: any) => api.delete(`/offer/${id}`),
-  patch: async (id?: any, params?: any) => api.patch(`/offer/${id}`, params),
-  getQrCode: async (params?: any) => api.post(`/auth/create`, params),
+const job = {
+  create: async (params?: any) => api.post("/job", params)
 };
 
 export default {
-  template,
-  offer,
+  job
 };

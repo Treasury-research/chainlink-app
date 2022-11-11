@@ -8,8 +8,11 @@ import { useRecoilState } from 'recoil';
 import { routerConfig } from './../../router';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import { routerActive } from './../../store/atom';
+import useWeb3Context from '../../hooks/useWeb3Context';
 
 export default function Home() {
+
+  const {account} = useWeb3Context();
   const chainlinkContract = useChainlinkContract();
 
   const [routers, setRouters] = useState(routerConfig);
@@ -80,8 +83,11 @@ export default function Home() {
   }
 
   useEffect(()=>{
-      getPageRank();
-  }, [])
+    if(!account){
+      return
+    }
+    getPageRank();
+  }, [account])
 
   return (
     <div className="page-home">

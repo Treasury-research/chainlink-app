@@ -60,9 +60,6 @@ export default function JobInitialization() {
             </div>
           )}
         </div>
-
-
-    
       </div>
     </div>
   );

@@ -1,9 +1,34 @@
+.btn-group {
+    overflow: hidden;
+    float: right;
+    margin-top: 20px;
+
+    >div {
+        float: left;
+        margin-right: 10px;
+    }
+}
+
 .chainlink-primary-btn {
     padding: 10px 20px;
     background: #FF3300;
     width: fit-content;
     color: #fff;
     border-radius: 20px;
+    cursor: pointer;
+}
+.chainlink-prev-btn{
+    padding: 10px 20px;
+    width: fit-content;
+    color: #000;
+    border-radius: 20px;
+    border:1px solid #979797;
+    cursor: pointer;
+}
+.chainlink-default-btn {
+    padding: 10px 20px;
+    width: fit-content;
+    color: #000;
     cursor: pointer;
 }
 
@@ -16,7 +41,7 @@
 }
 
 .ant-table .ant-table-tbody td {
-    background: rgba(255,255,255,0);
+    background: rgba(255, 255, 255, 0);
 }
 
 .ant-table .ant-table-thead th:first-child {
@@ -47,6 +72,45 @@
 .ant-table-thead>tr>th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
     display: none;
 }
-.ant-switch-checked{
+
+.ant-switch-checked {
     background: #FF3300;
+}
+
+.ant-select {
+    width: 100%;
+
+    .ant-select-selector {
+        height: 40px !important;
+        line-height: 40px !important;
+    }
+}
+
+.ant-select-single .ant-select-selector .ant-select-selection-item,
+.ant-select-single .ant-select-selector .ant-select-selection-placeholder {
+    line-height: 40px !important;
+}
+
+.ant-radio-checked .ant-radio-inner {
+    border-color: #FF3300;
+}
+
+.ant-radio-inner::after {
+    background-color: #FF3300;
+}
+
+.ant-radio-checked::after {
+    border: 1px solid #FF3300;
+}
+
+.ant-radio-wrapper:hover .ant-radio,
+.ant-radio:hover .ant-radio-inner,
+.ant-radio-input:focus+.ant-radio-inner {
+    border-color: #FF3300;
+}
+
+.ant-radio-wrapper {
+    font-size: 20px;
+    font-family: Helvetica;
+    color: #000000;
 }

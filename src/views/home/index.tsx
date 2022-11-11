@@ -117,7 +117,7 @@ export default function Home() {
         </div>
       </div>
       <div className="page-right-content" key={history.location.key}>
-        <Router>
+        <Router forceRefresh={true}>
           <Switch>
             {
               routers.map((item: any, index: number) =>

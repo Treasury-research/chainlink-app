@@ -51,6 +51,7 @@ export default function JobInitialization() {
   }
 
   const listenCronStatus = useCallback (async() => {  
+    debugger
     const eventSource = new EventSource(`${baseURL}/cron/sse`);
     eventSource.onmessage = ({ data }) => {
       console.log('data', data);

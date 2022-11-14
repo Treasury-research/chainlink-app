@@ -11,11 +11,11 @@ export default function DataProcessing() {
 
   const history = useHistory();
 
-  const [dataType, setDataType] = useState('1');
+  const [dataType, setDataType] = useState('3');
 
   const [alogorithm, setAlogorithm] = useState('1');
 
-  const [interestedAddress,setInterestedAddress] = useState('');
+  const [interestedAddress, setInterestedAddress] = useState('');
 
   const [scriptType, setScriptType] = useState(1);
   
@@ -74,7 +74,7 @@ export default function DataProcessing() {
 
   useEffect(() => {
     setInterestedAddress(chainBaseInfo.interestedAddress);
-    setDataType(chainBaseInfo.dataType || '1');
+    setDataType(chainBaseInfo.dataType || '3');
     setAlogorithm(chainBaseInfo.alogorithm || '1');
   }, []);
 
@@ -87,10 +87,10 @@ export default function DataProcessing() {
           <div>
             <Radio.Group value={dataType} onChange={(e:any) => setDataType(e.target.value)}>
               <Space direction="vertical">
-                <Radio value={'1'}>Raw Data</Radio>
-                <Radio value={'2'}>Customized aggregation</Radio>
+                <Radio value={'1'} disabled>Raw Data</Radio>
+                <Radio value={'2'} disabled>Customized aggregation</Radio>
                 <Radio value={'3'}>Algorithm Ready to Use</Radio>
-                <Radio value={'4'}>Customized Algorithm</Radio>
+                <Radio value={'4'} disabled>Customized Algorithm</Radio>
               </Space>
             </Radio.Group>
           </div>
@@ -102,7 +102,6 @@ export default function DataProcessing() {
           <div className="title">Please enter the address you are interested in, separate by ";"</div>
           <div className='des'>you can add <span>up to 10 address</span> at one time</div>
           <div className='des'>For a better user experience, there is a limit of 10 returned results for each query by default.</div>
-          <div className='des'>You can modify this parameter to a maximum of 30 items for each query</div>
           <div>
             <TextArea rows={16} value={interestedAddress} onChange={(e:any) => setInterestedAddress(e.target.value)}/>
           </div>
@@ -125,9 +124,9 @@ export default function DataProcessing() {
             <Radio.Group value={alogorithm} onChange={(e:any) => setAlogorithm(e.target.value)}>
               <Space direction="vertical">
                 <Radio value={'1'}>PageRank</Radio>
-                <Radio value={'2'}>Address similarity</Radio>
-                <Radio value={'3'}>Shortest Path between two addresses</Radio>
-                <Radio value={'4'}>Community detection</Radio>
+                <Radio value={'2'} disabled>Address similarity</Radio>
+                <Radio value={'3'} disabled>Shortest Path between two addresses</Radio>
+                <Radio value={'4'} disabled>Community detection</Radio>
               </Space>
             </Radio.Group>
           </div>

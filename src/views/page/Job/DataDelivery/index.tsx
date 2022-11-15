@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Input, Radio, Space, DatePicker, Progress, Spin, TimePicker } from 'antd';
+import { Input, Radio, Space, DatePicker, Progress, Spin, TimePicker, message } from 'antd';
 import useWeb3Context from '../../../../hooks/useWeb3Context';
 import useChainlinkContract from '../../../../contract/useChainlinkContract';
 import { useHistory } from 'react-router-dom';
@@ -65,6 +65,7 @@ export default function DataDelivery() {
 
   const back = () => {
     setProgress(0);
+    setProgressOneTime(0);
     if (step === 'init') {
       setRouterActiveStr('dataProcessing');
     } else {
@@ -90,8 +91,6 @@ export default function DataDelivery() {
       setProgressOneTime(100)
     }
 
-    // Call Result:
-    // address:${res[0].join(',')}, rank:${res[1].join(',')} ,score:${res[2].join(',')}
     setStr((prev: any) => {
       return `
       Call Method:
@@ -99,8 +98,6 @@ export default function DataDelivery() {
       const ChainlinkAbi = ${JSON.stringify(ChainlinkAbi)}
       const res = new Web3.eth.Contract(ChainlinkAbi, '0x78880dEFC42Fc3bee64F71A480fEc0032Ad6dBA7').methods.getPageRank().call()`
     })
-    // address, rank ,score
-    console.log('res', res)
   }
 
   const requestCronJob = async () => {
@@ -108,13 +105,12 @@ export default function DataDelivery() {
     // notice, params to be replaced    
     const res:any = await api.job.createCron({
       // period
-      "cron": "*/3 * * * *",
+      "cron": getFrequency(),
       // watch address
       "address": chainBaseInfo.interestedAddress.toLowerCase().split(';'),
       "owner": account
     })
     if(res.result){
-      console.log('res', res)
       listenCronStatus();
     }
   }
@@ -132,12 +128,25 @@ export default function DataDelivery() {
     };
   }, [])
 
+  const getFrequency = () => {
+    let deliveryFrequency = '';
+    if(frequency == '1'){
+      if(autoType == '1' && date){
+        deliveryFrequency = `${Number(date.split(':')[1])} ${Number(date.split(':')[0])} * * *`
+      }
+      if(autoType == '2' && date){
+        deliveryFrequency = `${Number(date1)} * * * *`
+      }
+    }
+    return deliveryFrequency;
+  }
+
   const saveJob = async () => {
     setLoading(true);
     const res: any = await api.job.create({
       ...chainBaseInfo,
       deliveryMethod,
-      deliveryFrequency:'',
+      deliveryFrequency: getFrequency(),
       socialStatus:chainBaseInfo.socialStatus.join(','),
       interestedAddress:chainBaseInfo.interestedAddress.toLowerCase()
     })

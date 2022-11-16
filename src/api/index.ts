@@ -18,6 +18,7 @@ api.interceptors.response.use((res) => {
 
 const job = {
   create: async (params?: any) => api.post("/job", params),
+  list: async (params?: any) => api.get("/job", params),
   createCron: async (params?: any) => api.post("/cron", params),
 };
 

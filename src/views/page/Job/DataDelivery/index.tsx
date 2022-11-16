@@ -119,7 +119,9 @@ export default function DataDelivery() {
     const eventSource = new EventSource(`${baseURL}/cron/sse`);
     eventSource.onmessage = ({ data }) => {
       console.log('data', data);
-      if(data){
+      if(JSON.parse(data).progress == -1){
+        message.error('error')
+      }else{
         setProgress(JSON.parse(data).progress * 100)
         if(JSON.parse(data).progress == 1){
           getPageRank()

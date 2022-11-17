@@ -72,18 +72,22 @@ export default function DataPreparation() {
               {
                 value: '1',
                 label: 'POAPs Attend',
+                disabled:true
               },
               {
                 value: '2',
                 label: 'RSS Follows',
+                disabled:true
               },
               {
                 value: '3',
                 label: 'Snapshot Vote',
+                disabled:true
               },
               {
                 value: '4',
                 label: 'Twitter',
+                disabled:true
               },
               {
                 value: '5',

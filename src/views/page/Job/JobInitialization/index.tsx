@@ -50,16 +50,16 @@ export default function JobInitialization() {
     }
   }
 
-  const listenCronStatus = useCallback (async() => {  
-    const eventSource = new EventSource(`${baseURL}/cron/sse`);
-    eventSource.onmessage = ({ data }) => {
-      console.log('data', data);
-    };
-  }, [])
+  // const listenCronStatus = useCallback (async() => {  
+  //   const eventSource = new EventSource(`${baseURL}/cron/sse`);
+  //   eventSource.onmessage = ({ data }) => {
+  //     console.log('data', data);
+  //   };
+  // }, [])
 
-  useEffect(()=>{
-    listenCronStatus()
-  }, [])
+  // useEffect(()=>{
+  //   listenCronStatus()
+  // }, [])
 
   return (
     <div className="jobInitialization">
@@ -74,7 +74,7 @@ export default function JobInitialization() {
               <div className="chainlink-primary-btn" onClick={() => routerTo()}>
                 Create a New Job
               </div>
-              <div>
+              {/* <div>
                 For test case:
                 <div>
                   <a onClick={() => requestPageRankInfo()}>
@@ -87,7 +87,7 @@ export default function JobInitialization() {
                     Request Cron Job
                   </a>
                 </div>
-              </div>
+              </div> */}
             </>
           ) : (
             <div

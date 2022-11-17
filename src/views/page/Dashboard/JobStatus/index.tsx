@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Switch } from 'antd';
+import api from './../../../../api';
 import './index.scss';
 
 export default function JobStatus() {
@@ -68,6 +69,15 @@ export default function JobStatus() {
         </span>
     },
   ];
+
+  // const getList = async () => {
+  //   const res: any = await api.job.list()
+  // }
+
+  // useEffect(() => {
+  //   getList();
+  // }, []);
+
 
   return (
     <div className="jobStatus">

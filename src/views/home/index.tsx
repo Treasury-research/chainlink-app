@@ -77,7 +77,7 @@ export default function Home() {
   };
 
   const getPageRank = async () => {
-    const res = await chainlinkContract.getPageRank()
+    const res:any = await chainlinkContract.getPageRank()
     // address, rank ,score
     console.log('res', res)
   }

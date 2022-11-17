@@ -114,3 +114,19 @@
     font-family: Helvetica;
     color: #000000;
 }
+.ant-progress-bg{
+    height: 20px;
+    background-color:#FF3300;
+}
+
+.ant-spin-nested-loading > div > .ant-spin{
+    top: 200px;
+}
+
+.ant-spin-nested-loading{
+    height: 100%;
+    .ant-spin-container{
+        height: 100%;
+    }
+    
+}
